@@ -1,8 +1,12 @@
 package com.github.datago.domain.model.entity;
 
 import com.github.datago.domain.model.DBObject;
+import com.github.datago.domain.model.aggregate.DataBase;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Schema extends DBObject {
@@ -24,6 +28,18 @@ public class Schema extends DBObject {
     }
 
     public void putTable(Table table) {
-        tableMap.putIfAbsent(table.getName(), table);
+        tableMap.put(table.getName(), table);
+        table.setParent(this);
+    }
+
+    public DataBase dataBase() {
+        return (DataBase) getParent();
+    }
+
+    public Collection<Table> tables() {
+        if (!CollectionUtils.isEmpty(tableMap)) {
+            return tableMap.values();
+        }
+        return List.of();
     }
 }

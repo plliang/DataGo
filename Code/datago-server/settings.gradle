@@ -1,2 +1,4 @@
 rootProject.name = 'datago-server'
 
+include ':dadago-plugin-mysql'
+project(":dadago-plugin-mysql").projectDir = new File(rootDir, "plugins/dadago-plugin-mysql")

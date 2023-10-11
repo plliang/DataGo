@@ -1,5 +1,6 @@
 package com.github.datago.domain.model;
 
+import com.github.datago.domain.model.aggregate.DataBase;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.CollectionUtils;
@@ -8,7 +9,9 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class DBObject {
+public abstract class DBObject {
+
+    private DBObject parent;
 
     private String name;
 
@@ -22,4 +25,6 @@ public class DBObject {
         }
         return null;
     }
+
+    public abstract DataBase dataBase();
 }

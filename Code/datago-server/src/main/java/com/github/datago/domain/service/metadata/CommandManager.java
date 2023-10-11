@@ -16,16 +16,16 @@ import java.util.Optional;
 @Slf4j
 public class CommandManager {
 
-    private final Map<String, Class<? extends IDBQueryCommand>> commandMap = new HashMap<>();
+    private final Map<CommandKey, Class<? extends IDBQueryCommand>> commandMap = new HashMap<>();
 
     @PostConstruct
     void init() {
-        commandMap.put("schemas", SchemaQueryCommand.class);
-        commandMap.put("tables", TableQueryCommand.class);
-        commandMap.put("columns", ColumnsQueryCommand.class);
+        commandMap.put(CommandKey.schema, SchemaQueryCommand.class);
+        commandMap.put(CommandKey.table, TableQueryCommand.class);
+        commandMap.put(CommandKey.column, ColumnsQueryCommand.class);
     }
 
-    public Optional<IDBQueryCommand> get(String type) {
+    public Optional<IDBQueryCommand> get(CommandKey type) {
         Class<? extends IDBQueryCommand> dbQueryCommandClass = commandMap.get(type);
 
         if (dbQueryCommandClass != null) {

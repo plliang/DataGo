@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,24 +28,24 @@ public class MetaDataService {
         return dataBase;
     }
 
-    public void doQuery(String type, DataBase dataBase, DataSource dataSource) throws SQLException {
-        Optional<IDBQueryCommand> optional = commandManager.get(type);
+    public void doQuery(CommandKey key, DataBase dataBase, DataSource dataSource, List<String> limit) throws SQLException {
+        Optional<IDBQueryCommand> optional = commandManager.get(key);
         if (optional.isPresent()) {
             IDBQueryCommand queryCommand = optional.get();
             queryCommand.setDataSource(dataSource);
-            queryCommand.query(dataSource, dataBase);
+            queryCommand.query(dataSource, dataBase, limit);
         }
     }
 
-    public void findSchemas(DataBase dataBase, DataSource dataSource) throws SQLException {
-        doQuery("schemas", dataBase, dataSource);
+    public void findSchemas(DataBase dataBase, DataSource dataSource, List<String> limit) throws SQLException {
+        doQuery(CommandKey.schema, dataBase, dataSource, limit);
     }
 
-    public void findTables(DataBase dataBase, DataSource dataSource) throws SQLException {
-        doQuery("tables", dataBase, dataSource);
+    public void findTables(DataBase dataBase, DataSource dataSource, List<String> limit) throws SQLException {
+        doQuery(CommandKey.table, dataBase, dataSource, limit);
     }
 
-    public void findColumns(DataBase dataBase, DataSource dataSource) throws SQLException {
-        doQuery("columns", dataBase, dataSource);
+    public void findColumns(DataBase dataBase, DataSource dataSource, List<String> limit) throws SQLException {
+        doQuery(CommandKey.column, dataBase, dataSource, limit);
     }
 }

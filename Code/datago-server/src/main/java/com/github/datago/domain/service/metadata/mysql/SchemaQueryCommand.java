@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class SchemaQueryCommand extends AbstractQueryCommand {
@@ -24,7 +25,7 @@ public class SchemaQueryCommand extends AbstractQueryCommand {
 
     @Override
     public void query(DataSource dataSource, DataBase dataBase, List<String> limit) throws SQLException {
-        doQuery(MYSQL_SCHEMA_QUERY_SQL, dataBase, (preparedStatement, db) -> {
+        doQuery(generateQuerySQL(limit), dataBase, (preparedStatement, db) -> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             Map<String, Schema> schemaMap = new HashMap<>();
@@ -40,7 +41,12 @@ public class SchemaQueryCommand extends AbstractQueryCommand {
 
 
     @Override
-    protected String generateQuerySQL(List<String> limit) {
-        return MYSQL_SCHEMA_QUERY_SQL;
+    protected String generateQuerySQL(List<String> schemaList) {
+        if (CollectionUtils.isEmpty(schemaList)) {
+            return MYSQL_SCHEMA_QUERY_SQL;
+        }
+
+        List<String> schemas = schemaList.stream().map(schema -> "`" + schema + "`").collect(Collectors.toList());
+        return MYSQL_SCHEMA_QUERY_SQL + " WHERE SCHEMA_NAME IN (" + String.join(",", schemas) + ")";
     }
 }

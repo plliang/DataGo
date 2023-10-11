@@ -6,8 +6,9 @@ import com.github.datago.domain.model.entity.Schema;
 import com.github.datago.infrastructure.constant.metadata.CaseSensitiveMode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * 数据库对象聚合根
@@ -32,5 +33,36 @@ public class DataBase extends DBObject {
 
     public Schema getSchema(String name) {
         return findDBObj(schemas, name);
+    }
+
+    public String getName(String name) {
+        switch (sensitiveMode) {
+            case UPPER:
+                return name.toUpperCase();
+            case LOWER:
+                return name.toLowerCase();
+            default:
+                return name;
+        }
+    }
+
+    public void putSchema(Schema schema) {
+        if (CollectionUtils.isEmpty(schemas)) {
+            schemas = new HashMap<>();
+        }
+        schemas.put(schema.getName(), schema);
+        schema.setParent(this);
+    }
+
+    public Collection<Schema> schemas() {
+        if (!CollectionUtils.isEmpty(schemas)) {
+            return schemas.values();
+        }
+        return List.of();
+    }
+
+    @Override
+    public DataBase dataBase() {
+        return this;
     }
 }

@@ -6,10 +6,12 @@ import com.github.datago.domain.model.entity.Schema;
 import com.github.datago.domain.model.entity.Table;
 import com.github.datago.domain.service.metadata.AbstractQueryCommand;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @NoArgsConstructor
 public class ColumnsQueryCommand extends AbstractQueryCommand {
@@ -36,8 +38,8 @@ public class ColumnsQueryCommand extends AbstractQueryCommand {
     }
 
     @Override
-    public void query(DataSource dataSource, DataBase dataBase) throws SQLException {
-        doQuery(MYSQL_COLUMN_QUERY_SQL, dataBase, (preparedStatement, db) -> {
+    public void query(DataSource dataSource, DataBase dataBase, List<String> limit) throws SQLException {
+        doQuery(generateQuerySQL(limit), dataBase, (preparedStatement, db) -> {
             try (ResultSet resultSet = preparedStatement.executeQuery()){
                 while (resultSet.next()) {
                     String tableSchema = resultSet.getString("TABLE_SCHEMA");
@@ -62,5 +64,10 @@ public class ColumnsQueryCommand extends AbstractQueryCommand {
                 }
             }
         });
+    }
+
+    @Override
+    protected String generateQuerySQL(List<String> limit) {
+        return MYSQL_COLUMN_QUERY_SQL;
     }
 }
