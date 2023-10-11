@@ -4,6 +4,7 @@ import com.github.datago.domain.model.aggregate.DataBase;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -21,27 +22,29 @@ public class MetaDataService {
      * @param dataBase
      * @return
      */
-    public DataBase refresh(DataBase dataBase) {
+    private DataBase refresh(DataBase dataBase) {
 
         return dataBase;
     }
 
-    public void doQuery(String type, DataBase dataBase) throws SQLException {
+    public void doQuery(String type, DataBase dataBase, DataSource dataSource) throws SQLException {
         Optional<IDBQueryCommand> optional = commandManager.get(type);
         if (optional.isPresent()) {
-            optional.get().query(null, dataBase);
+            IDBQueryCommand queryCommand = optional.get();
+            queryCommand.setDataSource(dataSource);
+            queryCommand.query(dataSource, dataBase);
         }
     }
 
-    public void findSchemas(DataBase dataBase) throws SQLException {
-        doQuery("schema", dataBase);
+    public void findSchemas(DataBase dataBase, DataSource dataSource) throws SQLException {
+        doQuery("schemas", dataBase, dataSource);
     }
 
-    public void findTables(DataBase dataBase) throws SQLException {
-        doQuery("tables", dataBase);
+    public void findTables(DataBase dataBase, DataSource dataSource) throws SQLException {
+        doQuery("tables", dataBase, dataSource);
     }
 
-    public void findColumns(DataBase dataBase) throws SQLException {
-        doQuery("columns", dataBase);
+    public void findColumns(DataBase dataBase, DataSource dataSource) throws SQLException {
+        doQuery("columns", dataBase, dataSource);
     }
 }

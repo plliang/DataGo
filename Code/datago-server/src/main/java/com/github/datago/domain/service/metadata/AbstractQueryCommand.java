@@ -1,17 +1,24 @@
 package com.github.datago.domain.service.metadata;
 
 import com.github.datago.domain.model.aggregate.DataBase;
+import lombok.NoArgsConstructor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
+@NoArgsConstructor
 public abstract class AbstractQueryCommand implements IDBQueryCommand {
 
     private DataSource dataSource;
 
     public AbstractQueryCommand(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -30,6 +37,8 @@ public abstract class AbstractQueryCommand implements IDBQueryCommand {
             function2.accept(preparedStatement, dataBase);
         }
     }
+
+    protected abstract String generateQuerySQL(List<String> limit);
 
     protected interface Function2<T1, T2 extends Object>  {
 

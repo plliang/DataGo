@@ -5,11 +5,13 @@ import com.github.datago.domain.model.entity.Column;
 import com.github.datago.domain.model.entity.Schema;
 import com.github.datago.domain.model.entity.Table;
 import com.github.datago.domain.service.metadata.AbstractQueryCommand;
+import lombok.NoArgsConstructor;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@NoArgsConstructor
 public class ColumnsQueryCommand extends AbstractQueryCommand {
 
     private static final String MYSQL_COLUMN_QUERY_SQL = "select TABLE_SCHEMA, " +

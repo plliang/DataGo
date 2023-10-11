@@ -1,6 +1,7 @@
 package com.github.datago.domain.model.aggregate;
 
 import com.github.datago.domain.model.DBObject;
+import com.github.datago.domain.model.entity.DBConnect;
 import com.github.datago.domain.model.entity.Schema;
 import com.github.datago.infrastructure.constant.metadata.CaseSensitiveMode;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import java.util.Map;
 @Getter
 @Setter
 public class DataBase extends DBObject {
+
+    private DBConnect dbConnect;
 
     /**
      * 大小写敏感模式

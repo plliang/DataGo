@@ -1,8 +1,12 @@
 package com.github.datago.domain.service.metadata;
 
+import com.github.datago.domain.service.metadata.mysql.ColumnsQueryCommand;
+import com.github.datago.domain.service.metadata.mysql.SchemaQueryCommand;
+import com.github.datago.domain.service.metadata.mysql.TableQueryCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,10 +16,17 @@ import java.util.Optional;
 @Slf4j
 public class CommandManager {
 
-    private Map<String, Class<IDBQueryCommand>> commandMap = new HashMap<>();
+    private final Map<String, Class<? extends IDBQueryCommand>> commandMap = new HashMap<>();
+
+    @PostConstruct
+    void init() {
+        commandMap.put("schemas", SchemaQueryCommand.class);
+        commandMap.put("tables", TableQueryCommand.class);
+        commandMap.put("columns", ColumnsQueryCommand.class);
+    }
 
     public Optional<IDBQueryCommand> get(String type) {
-        Class<IDBQueryCommand> dbQueryCommandClass = commandMap.get(type);
+        Class<? extends IDBQueryCommand> dbQueryCommandClass = commandMap.get(type);
 
         if (dbQueryCommandClass != null) {
             try {
