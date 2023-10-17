@@ -17,6 +17,8 @@ import java.util.*;
 @Setter
 public class DataBase extends DBObject {
 
+    private String quote = "\"";
+
     private DBConnect dbConnect;
 
     /**
@@ -64,5 +66,16 @@ public class DataBase extends DBObject {
     @Override
     public DataBase dataBase() {
         return this;
+    }
+
+    public Schema get(String key) {
+        if (!CollectionUtils.isEmpty(this.schemas)) {
+            return schemas.getOrDefault(key, null);
+        }
+        return null;
+    }
+
+    public String getDBName(String name) {
+        return quote + name + quote;
     }
 }

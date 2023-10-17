@@ -1,6 +1,6 @@
 package com.github.datago.domain.service.convertor;
 
-import com.github.datago.domain.model.aggregate.DataBase;
+import com.github.datago.domain.model.convertor.DataBaseMapping;
 import com.github.datago.domain.model.entity.Schema;
 import com.github.datago.domain.model.entity.Table;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * 数据库对象转换服务
@@ -17,17 +16,17 @@ import java.util.List;
 public class DBObjConvertService {
 
     @Resource
-    private IDBObjConvertor<Schema, DataBase> schemaConvert;
+    private IDBObjConvertor<Schema> schemaConvert;
 
     @Resource
-    private IDBObjConvertor<Table, Schema> tableConvert;
+    private IDBObjConvertor<Table> tableConvert;
 
-    public void convert(Collection<Schema> schemas, DataBase tDatabase) {
+    public void convert(Collection<Schema> schemas, DataBaseMapping mapping) {
         if (!CollectionUtils.isEmpty(schemas)) {
             for (Schema schema : schemas) {
-                Schema convertSchema = schemaConvert.convert(schema, tDatabase);
+                schemaConvert.convert(schema, mapping);
 
-                convert(schema.tables(), convertSchema);
+                convertTables(schema.tables(), mapping);
             }
         }
     }
@@ -37,10 +36,10 @@ public class DBObjConvertService {
      * @param tables 待转换的表对象
      * @param tSchema 目标库Schema
      */
-    public void convert(Collection<Table> tables, Schema tSchema) {
+    public void convertTables(Collection<Table> tables, DataBaseMapping mapping) {
         if (!CollectionUtils.isEmpty(tables)) {
             tables.forEach(table -> {
-                Table convertTable = tableConvert.convert(table, tSchema);
+                Table convertTable = tableConvert.convert(table, mapping);
             });
         }
     }

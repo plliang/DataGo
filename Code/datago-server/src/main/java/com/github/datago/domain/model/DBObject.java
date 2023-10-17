@@ -26,5 +26,20 @@ public abstract class DBObject {
         return null;
     }
 
+    protected <T extends DBObject> T findByKey(Map<String, T> dbObjMap, String key) {
+        if (!CollectionUtils.isEmpty(dbObjMap)) {
+            for (T value : dbObjMap.values()) {
+                if (value.key().equals(key)) {
+                    return value;
+                }
+            }
+        }
+        return null;
+    }
+
     public abstract DataBase dataBase();
+
+    public String key() {
+        return this.name;
+    }
 }

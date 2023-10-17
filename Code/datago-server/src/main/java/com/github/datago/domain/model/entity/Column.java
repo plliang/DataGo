@@ -32,4 +32,9 @@ public class Column extends DBObject {
         this.nullable = column.nullable;
         this.dataType = column.dataType;
     }
+
+    @Override
+    public String key() {
+        return String.join("_", getParent().key(), getName());
+    }
 }

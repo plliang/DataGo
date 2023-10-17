@@ -2,6 +2,7 @@ package com.github.datago.domain.service.convertor;
 
 import com.github.datago.DataGoApplication;
 import com.github.datago.domain.model.aggregate.DataBase;
+import com.github.datago.domain.model.convertor.DataBaseMapping;
 import com.github.datago.domain.model.entity.DBConnect;
 import com.github.datago.domain.service.metadata.MetaDataService;
 import com.github.datago.infrastructure.connect.DatasourceFactory;
@@ -11,11 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-
 import java.sql.SQLException;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = DataGoApplication.class)
 class DBObjConvertServiceTest {
@@ -28,7 +26,10 @@ class DBObjConvertServiceTest {
 
     @Test
     void convert() throws SQLException {
+        DataBaseMapping mapping = new DataBaseMapping();
+
         DataBase dataBase = new DataBase();
+        mapping.setSrcDataBase(dataBase);
         DBConnect dbConnect = dbConnect();
 
         DataSource dataSource = DatasourceFactory.newInstance(dbConnect);
@@ -37,9 +38,10 @@ class DBObjConvertServiceTest {
         metaDataService.findColumns(dataBase, dataSource, null);
 
         DataBase tDatabase = new DataBase();
+        mapping.setTargetDataBase(tDatabase);
         tDatabase.setSensitiveMode(CaseSensitiveMode.UPPER);
 
-        dbObjConvertService.convert(dataBase.schemas(), tDatabase);
+        dbObjConvertService.convert(dataBase.schemas(), mapping);
         System.out.println();
     }
 

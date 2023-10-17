@@ -27,6 +27,10 @@ public class Schema extends DBObject {
         return findDBObj(tableMap, name);
     }
 
+    public Table findTable(String key) {
+        return findByKey(tableMap, key);
+    }
+
     public void putTable(Table table) {
         tableMap.put(table.getName(), table);
         table.setParent(this);
@@ -41,5 +45,10 @@ public class Schema extends DBObject {
             return tableMap.values();
         }
         return List.of();
+    }
+
+    @Override
+    public String key() {
+        return getName();
     }
 }

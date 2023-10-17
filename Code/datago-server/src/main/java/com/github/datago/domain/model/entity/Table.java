@@ -34,4 +34,9 @@ public class Table extends DBObject {
     public DataBase dataBase() {
         return schema().dataBase();
     }
+
+    @Override
+    public String key() {
+        return String.join("_", getParent().key(), getName());
+    }
 }
