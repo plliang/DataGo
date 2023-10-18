@@ -8,7 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数据库对象聚合根
@@ -68,9 +71,35 @@ public class DataBase extends DBObject {
         return this;
     }
 
-    public Schema get(String key) {
+    public DBObject get(String key) {
+        DBObject ret = null;
         if (!CollectionUtils.isEmpty(this.schemas)) {
-            return schemas.getOrDefault(key, null);
+            ret = get(schemas, key);
+
+            if (ret == null) {
+                for (Schema schema : schemas.values()) {
+                    ret = get(schema.getSequenceMap(), key);
+
+                    if (ret == null) {
+                        ret = get(schema.getTableMap(), key);
+                    }
+
+                    if (ret != null) {
+                        return ret;
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    private DBObject get(Map<String, ? extends DBObject> objMap, String key) {
+        if (!CollectionUtils.isEmpty(objMap)) {
+            for (DBObject dbObject : objMap.values()) {
+                if (dbObject.key().equals(key)) {
+                    return dbObject;
+                }
+            }
         }
         return null;
     }

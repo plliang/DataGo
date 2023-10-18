@@ -2,13 +2,13 @@ package com.github.datago.domain.model.entity;
 
 import com.github.datago.domain.model.DBObject;
 import com.github.datago.domain.model.aggregate.DataBase;
+import lombok.Getter;
+import org.assertj.core.util.Maps;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Getter
 public class Schema extends DBObject {
 
     private Map<String, Sequence> sequenceMap;
@@ -18,7 +18,6 @@ public class Schema extends DBObject {
     public Schema(String name) {
         super(name);
     }
-
     public Sequence getSequence(String name) {
         return findDBObj(sequenceMap, name);
     }

@@ -31,7 +31,7 @@ public class ColumnConvertor implements IDBObjConvertor<Column>  {
         String targetTableKey = mapping.getMappings().get(table.key());
 
         DataBase targetDataBase = mapping.getTargetDataBase();
-        Schema targetSchemaObj = targetDataBase.get(targetSchemaKey);
+        Schema targetSchemaObj = (Schema) targetDataBase.get(targetSchemaKey);
         Table targetTable = targetSchemaObj.findTable(targetTableKey);
 
         Column convertColumn = new Column(src);

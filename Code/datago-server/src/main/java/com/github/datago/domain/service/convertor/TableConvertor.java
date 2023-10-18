@@ -25,7 +25,7 @@ public class TableConvertor implements IDBObjConvertor<Table> {
     @Override
     public Table convert(Table src, DataBaseMapping mapping) {
         String mappingSchemaKey = mapping.getMappings().get(src.getParent().key());
-        Schema targetSchema = mapping.getTargetDataBase().get(mappingSchemaKey);
+        Schema targetSchema = (Schema) mapping.getTargetDataBase().get(mappingSchemaKey);
 
         Table convertTable = new Table(targetSchema.dataBase().getName(src.getName()));
         targetSchema.putTable(convertTable);
