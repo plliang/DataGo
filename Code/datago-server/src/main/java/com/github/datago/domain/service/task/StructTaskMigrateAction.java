@@ -42,13 +42,15 @@ public class StructTaskMigrateAction extends RecursiveAction {
         DataBase targetDataBase = mapping.getTargetDataBase();
         DBObject dbObject = targetDataBase.get(targetKey);
 
-        String sql = "";
-        if (dbObject instanceof Schema) {
-            sql = ddlService.generate("createSchema", (Schema) dbObject);
-        } else if (dbObject instanceof Table) {
-            sql = ddlService.generate("createTable", (Table) dbObject);
-        }
+        if (dbObject != null) {
+            String sql = "";
+            if (dbObject instanceof Schema) {
+                sql = ddlService.generate("createSchema", (Schema) dbObject);
+            } else if (dbObject instanceof Table) {
+                sql = ddlService.generate("createTable", (Table) dbObject);
+            }
 
-        System.out.println("创建SQL: " + sql);
+            System.out.println("创建SQL: " + sql);
+        }
     }
 }

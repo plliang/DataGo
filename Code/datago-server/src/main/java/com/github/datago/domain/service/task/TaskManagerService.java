@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TaskManagerService {
 
-    private final ForkJoinPool FORK_JOIN_POOL = new ForkJoinPool();
+    private final ForkJoinPool FORK_JOIN_POOL = new ForkJoinPool(1);
 
     @Resource
     private DDLService ddlService;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TableCreateGenerator implements IDDLGenerate<Table> {
+public class TableCreateGenerator implements IDDLGenerator<Table> {
     @Override
     public String generate(Table table) {
         StringBuilder sql = new StringBuilder("CREATE TABLE ");

@@ -20,6 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,14 +76,16 @@ class TaskManagerServiceTest {
         List<TaskNode> taskNodeList = new ArrayList<>();
         taskContext.setTaskNodes(taskNodeList);
 
-        for (Map.Entry<String, String> entry : mapping.getMappings().entrySet()) {
-            TaskNode taskNode = new TaskNode();
+        for (Schema schema : mapping.getSrcDataBase().getSchemas().values()) {
+            for (Table table : schema.getTableMap().values()) {
+                TaskNode taskNode = new TaskNode();
 
-            taskNode.setTaskType(TaskType.struct);
-            taskNode.setTaskContext(taskContext);
-            taskNode.setKey(entry.getKey());
+                taskNode.setTaskType(TaskType.struct);
+                taskNode.setTaskContext(taskContext);
+                taskNode.setKey(table.key());
 
-            taskNodeList.add(taskNode);
+                taskNodeList.add(taskNode);
+            }
         }
 
 
