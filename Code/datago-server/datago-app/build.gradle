@@ -12,7 +12,13 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     implementation project(":datago-core")
+    implementation project(":dadago-plugin-mysql")
 }
 
 test {

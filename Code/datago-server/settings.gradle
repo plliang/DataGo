@@ -1,4 +1,10 @@
-rootProject.name = 'datago-server'
+rootProject.name = 'datago-framework'
 
 include ':dadago-plugin-mysql'
 project(":dadago-plugin-mysql").projectDir = new File(rootDir, "plugins/dadago-plugin-mysql")
+
+include ':datago-core'
+project(':datago-core').projectDir = new File(rootDir, 'datago-core')
+
+include ':datago-app'
+project(':datago-app').projectDir = new File(rootDir, 'datago-app')
